@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bloghost.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(BlogContext))]
     [Migration("20180928190732_Initial")]
     partial class Initial
     {

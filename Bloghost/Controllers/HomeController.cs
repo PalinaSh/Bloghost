@@ -11,6 +11,12 @@ namespace Bloghost.Controllers
 {
     public class HomeController : Controller
     {
+        private BlogContext db;
+        public HomeController(BlogContext context)
+        {
+            db = context;
+        }
+
         [Authorize]
         public IActionResult Index()
         {

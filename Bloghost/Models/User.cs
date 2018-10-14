@@ -15,5 +15,16 @@ namespace Bloghost.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        public ICollection<Blog> Blogs { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
+        public int? RoleId { get; set; }
+        public Role Role { get; set; }
+
+        public User()
+        {
+            Blogs = new List<Blog>();
+            Comments = new List<Comment>();
+        }
     }
 }
