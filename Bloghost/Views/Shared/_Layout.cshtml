@@ -7,91 +7,57 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/open-iconic-master/font/css/open-iconic-bootstrap.css" />
+        <link href="~/open-iconic-master/font/css/open-iconic.css" rel="stylesheet" />
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <!--<h1 class="logo">
-            <a tabindex="-1" class="logo-anchor" prima-component="header-logo" href="/" aria-label="Tumblr">
-                <div class="png-logo">P</div>
-                <div class="preload-container" style="background-image: url(https://assets.tumblr.com/images/logo/hover-animations/1.png?_v=161861a…);">
-                    <img data-img-id="1" src="https://assets.tumblr.com/images/logo/hover-animations/1.png?_v=161861acded461bb6e995593a3bae835">
-                </div>
-            </a>
-        </h1>
-        <div class="right">
-            <a class="signup_link login-button" href="https://www.tumblr.com/login" role="button">Войти</a>
-            <a class="signup_link signup-button" href="https://www.tumblr.com/register" role="button">Зарегистрироваться</a>
-        </div>
-        <div class="ui_search " id="search_field">
-            <form method="get" action="/search" id="search_form" class="search_form is_tag_search" role="search" novalidate>
-                <input type="hidden" name="scope" id="search_scope" value="all_of_tumblr" /><div class="search_form_row ">
-                    <div class="search_form_field">
-                        <input tabindex="1"
-                               type="text"
-                               name="q"
-                               id="search_query"
-                               placeholder="Поиск в Tumblr"
-                               value=""
-                               class="search_query popover_button "
-                               autocomplete="off"
-                               required="required" />
-                    </div>
+    <nav class="navbar navbar-expand-lg" style="background-color: midnightblue">
+        <a asp-action="Index" asp-controller="Home" class="a logo font-weight-bold">p</a>
+        <div class="collapse navbar-collapse">
+            <form class="input-group col-4 mx-4">
+                <input class="form-control" placeholder="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit">
+                        <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
+                    </button>
                 </div>
             </form>
-        </div>-->
-        <!--
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="oi oi-person"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">Signed in as <strong>@User.Identity.Name</strong></a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="#">Your profile</a>
+                    <a class="dropdown-item" href="#">Your blogs</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" asp-action="Logout" asp-controller="Account" style="color:black">Logout</a>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>-->
-
+            </div>
+        }
+        else
+        {
+            <a asp-action="Login" asp-controller="Account" class="btn btn-secondary" style="color:midnightblue">Login</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary mx-2">Sign in</a>
+        }
     </nav>
 
     <!--меню-->
-    <form asp-action="Logout" asp-controller="Account">
-        <button>Logout</button>
-    </form>
 
     <div>
         @RenderBody()
     </div>
 
     @RenderSection("Scripts", required: false)
-    <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
 </body>
 </html>

@@ -1,1 +1,50 @@
-﻿
+﻿.content-center:before {
+    content: '';
+    display: inline-block;
+    height: 20vh;
+}
+
+.content-center {
+    text-align: center;
+}
+
+.caption {
+    font-size: 450%;
+}
+
+.logo {
+    font-size:2rem; 
+    font-family:'Bookman Old Style'; 
+    position: absolute; 
+    top: -1.5px; 
+    left: 1vw;
+}
+
+.a {
+    color: white;
+}
+
+.a:visited {
+    color: white;
+}
+
+.a:active {
+    color: white;
+}
+
+.a:hover{
+    color: darkturquoise;
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+.list-errors ul {
+    list-style: none;
+    color: red;
+    text-align: center;
+    position: relative;
+    left: -20px;
+}

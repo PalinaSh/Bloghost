@@ -38,7 +38,7 @@ namespace Bloghost.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                ModelState.AddModelError("", "Incorrect email and(or) password");
             }
             return View(model);
         }
@@ -69,7 +69,7 @@ namespace Bloghost.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "Пользователь с таким email не существует");
+                    ModelState.AddModelError("", "User with this email exists");
             }
             return View(model);
         }

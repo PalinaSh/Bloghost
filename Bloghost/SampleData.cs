@@ -11,7 +11,7 @@ namespace Bloghost
     {
         public static void Initialize(BlogContext context)
         {
-            if (!context.Users.Any())
+            if (!context.Roles.Any())
             {
                 string adminRoleName = "admin";
                 string userRoleName = "user";
