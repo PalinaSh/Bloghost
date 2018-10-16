@@ -1,0 +1,50 @@
+﻿@model Bloghost.ViewModels.UserModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="m-4">
+    
+    <div class="col-4 float-left pr-3">
+        <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom" />
+        <form asp-action="ChangePhoto" asp-controller="User" method="post" enctype="multipart/form-data">
+            <div class="mb-3 mt-3" style="width: 19rem;">
+                <input type="file" class="custom-file-input" accept="image/jpeg,image/png" name="uploadedFile"/>
+            </div>
+            <button type="submit">Load</button>
+        </form>
+    </div>
+
+    <form class="p-2">
+        <div class="form-group row">
+            <label class="col-3 col-form-label">Your Name</label>
+            <div class="col-9">
+                <input class="form-control" placeholder="Name" value="@Model.Name">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-3 col-form-label">Your Email</label>
+            <div class="col-9">
+                <input class="form-control" placeholder="Email" value="@Model.Email">
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label class="col-3 col-form-label">Your Password</label>
+            <div class="col-9">
+                <input class="form-control" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-3 col-form-label">Confirm password</label>
+            <div class="col-9">
+                <input class="form-control" placeholder="Confirm password">
+            </div>
+        </div>
+        <div class="form-group row text-right">
+            <div class="col-12">
+                <button type="submit" class="btn btn-secondary">Edit</button>
+            </div>
+        </div>
+    </form>
+</div>

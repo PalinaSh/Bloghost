@@ -15,6 +15,8 @@ namespace Bloghost.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public string Photo { get; set; }
         public ICollection<Blog> Blogs { get; set; }
         public ICollection<Comment> Comments { get; set; }
 

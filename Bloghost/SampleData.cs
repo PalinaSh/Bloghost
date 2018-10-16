@@ -25,7 +25,8 @@ namespace Bloghost
                 context.Roles.Add(userRole);
                 context.Roles.Add(adminRole);
 
-                context.Users.Add(new User { Email = adminEmail, Password = adminPassword, Role = adminRole, Name = "Admin" });
+                context.Users.Add(new User { Email = adminEmail, Password = adminPassword, Role = adminRole,
+                    Name = "Admin", Photo = "~/images/avatar.png" });
 
                 context.SaveChanges();
             }

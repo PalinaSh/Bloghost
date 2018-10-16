@@ -57,7 +57,8 @@ namespace Bloghost.Controllers
                 if (user == null)
                 {
                     // добавляем пользователя в бд
-                    user = new User { Email = model.Email, Password = HashPassword(model.Password), Name = model.Name };
+                    user = new User { Email = model.Email, Password = HashPassword(model.Password),
+                        Name = model.Name, Photo = "~/images/avatar.png" };
                     Role userRole = await db.Roles.FirstOrDefaultAsync(r => r.Name == "user");
                     if (!(userRole is null))
                         user.Role = userRole;
