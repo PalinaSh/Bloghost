@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Bloghost.Models.Blog>
+﻿@model Bloghost.ViewModels.UserModel
 @{
     ViewData["Title"] = "Profile";
 }
 
 <div class="col-3 float-left pr-3 m-4">
-    <a title="Change your avatar" href="#">
-        <img src="~/images/avatar.png" width="302" height="302" class="avatar bs-tooltip-bottom"/>
+    <a title="Change your avatar" asp-controller="User" asp-action="Edit">
+        <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom"/>
     </a>
     <div class="py-3">
-        <h3>@User.Identity.Name</h3>
+        <h3>@Model.Name</h3>
     </div>
     <div class="mb-3" style="width: 19rem;">
         <a class="btn btn-secondary btn-block" href="#">Add new blog</a>
@@ -16,7 +16,7 @@
     </div>
 </div>
 
-@foreach (var blog in Model)
+@foreach (var blog in Model.Blogs)
 {
 <div class="card" style="width: 18rem;">
     <div class="card-body">

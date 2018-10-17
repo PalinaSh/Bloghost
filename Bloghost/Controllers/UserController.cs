@@ -17,7 +17,6 @@ namespace Bloghost.Controllers
     {
         private BlogContext db;
         private IHostingEnvironment _appEnvironment;
-        private static User currentProfile;
         public UserController(BlogContext context, IHostingEnvironment appEnvironment)
         {
             db = context;
@@ -28,14 +27,21 @@ namespace Bloghost.Controllers
         [Authorize]
         public async Task<IActionResult> Profile()
         {
-            return View(await db.Blogs.ToListAsync());
+            User currentProfile = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name);
+            UserModel model = new UserModel
+            {
+                Name = currentProfile.Name,
+                Photo = currentProfile.Photo,
+                Blogs = await db.Blogs.Where(b => b.UserId == currentProfile.Id).ToListAsync()
+            };
+            return View(model);
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult Edit()
         {
-            currentProfile = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name);
+            User currentProfile = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name);
             UserModel model = new UserModel
             {
                 Name = currentProfile.Name,
@@ -49,13 +55,29 @@ namespace Bloghost.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(UserModel model)
         {
+            User currentProfile = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name);
+            if (ModelState.IsValid)
+            {
+                if (model.Password != null)
+                    currentProfile.Password = model.Password;
+                currentProfile.Name = model.Name;
 
-            return View(model);
+                db.Users.Update(currentProfile);
+                await db.SaveChangesAsync();
+            }
+            UserModel editedModel = new UserModel
+            {
+                Name = currentProfile.Name,
+                Email = currentProfile.Email,
+                Photo = currentProfile.Photo
+            };
+            return View(editedModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
+            User currentProfile = db.Users.FirstOrDefault(u => u.Name == User.Identity.Name);
             if (uploadedFile != null)
             {
                 // путь к папке Files
