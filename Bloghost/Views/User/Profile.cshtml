@@ -3,29 +3,96 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="col-3 float-left pr-3 m-4">
-    <a title="Change your avatar" asp-controller="User" asp-action="Edit">
-        <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom"/>
-    </a>
-    <div class="py-3">
-        <h3>@Model.Name</h3>
+<div class="m-4">
+    <div class="col-3 float-left pr-3">
+        <a title="Change your avatar" asp-controller="User" asp-action="Edit">
+            <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom" />
+        </a>
+        <div class="py-3">
+            <h3>@Model.Name</h3>
+        </div>
+        <div class="mb-3" style="width: 19rem;">
+            <button class="btn btn-secondary btn-block" id="btnCreateBlog">Add new blog</button>
+            <a class="btn btn-secondary btn-block" asp-action="Edit" asp-controller="User">Edit profile</a>
+        </div>
     </div>
-    <div class="mb-3" style="width: 19rem;">
-        <a class="btn btn-secondary btn-block" href="#">Add new blog</a>
-        <a class="btn btn-secondary btn-block" asp-action="Edit" asp-controller="User">Edit profile</a>
+
+    <div id="blogs">
+        @foreach (var blog in Model.Blogs)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="card-link">Card link</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
-@foreach (var blog in Model.Blogs)
-{
-<div class="card" style="width: 18rem;">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-    </div>
-</div>
-}
+<script>
+    function CreateNewBlog() {
+        var nameBlog = $("#name").val();
+        var descriptionBlog = $("#description").val();
+        $.ajax({
+            url: '@Url.Action("Create", "Blog")',
+            type: "POST",
+            data: { 'name': nameBlog, 'description': descriptionBlog },
+            success: function (response) {
+                CreateBlogsFromJSON(response);
+            },
+            error: function (xhr, status, error) {
+                var span = $('<label style="color:red;" >Name is required</label>');
+                $('#error-span').empty();
+                $('#error-span').append(span);
+            }
+        });
+    };
 
+    function CreateBlogsFromJSON(response) {
+        response = JSON.parse(response);
+        $("#blogs").empty();
+        for (var i = 0; i < response.length; i++) {
+            BlogCards();
+        }
+    }
+
+    function CreateBlogsFromModel() {
+        $("#blogs").empty();
+        @foreach (var blog in Model.Blogs)
+        { 
+            <text>
+                $("#blogs").append('<a href="#" class="card-link">' + '@blog.Id'+'</a > ');
+            </text>
+        }
+    }
+
+    function BlogCards() {
+        $("#blogs").append('<div id="blogs">');
+        $("#blogs").append('<div class="card" style="width: 18rem;">');
+        $("#blogs").append('<div class="card-body">');
+        $("#blogs").append('<h5 class= "card-title" > Card title</h5 >');
+        $("#blogs").append('<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>');
+        $("#blogs").append('<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>');
+        $("#blogs").append('<a href="#" class="card-link">Card link</a>');
+        $("#blogs").append('<a href="#" class="card-link">Another link</a>');
+        $("#blogs").append('</div ></div >');
+    }
+
+    function CreateView() {
+        $("#blogs").empty();
+        $("#blogs").append('<form class="m-4">');
+        $("#blogs").append('<div class="form-group row"><label class="col-2 col-form-label">Blog name</label><div class="col-5"><input id="name" type="text" class="form-control" placeholder="Name"><div id="error-span"></div></div><label class="col-2 col-form-label offset-1">Creation date</label><div class="col-2"><input readonly type="text" class="form-control-plaintext" placeholder="Name" value="@DateTime.Now.ToString("dd.MM.yyyy HH:mm")" /></div></div>');
+        $("#blogs").append('<div class="form-group row"><label class="col-2 col-form-label">Description</label><div class="col-10"><textarea id="description" type="text" class="form-control" placeholder="Description" ></textarea ></div ></div>');
+        $("#blogs").append('<div class="form-group row text-right"><div class="col-12"><button id="btnOK" type="submit" class="btn btn-secondary">OK</button><button id="btnCansel" type="submit" class="btn btn-secondary ml-2">Cansel</button></div ></div >');
+        $("#blogs").append('</form>');
+        $("#btnOK").on("click", CreateNewBlog);
+        $("#btnCansel").on("click", CreateBlogsFromModel);
+    };
+
+    $("#btnCreateBlog").on("click", CreateView);
+
+</script>

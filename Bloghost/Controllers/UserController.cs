@@ -59,7 +59,10 @@ namespace Bloghost.Controllers
             if (ModelState.IsValid)
             {
                 if (model.Password != null)
-                    currentProfile.Password = model.Password;
+                {
+                    string hashPassword = AccountController.HashPassword(model.Password);
+                    currentProfile.Password = hashPassword;
+                }
                 currentProfile.Name = model.Name;
 
                 db.Users.Update(currentProfile);
