@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Bloghost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Bloghost.ViewModels;
 
 namespace Bloghost.Controllers
 {
@@ -21,7 +22,14 @@ namespace Bloghost.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Blogs.ToListAsync());
+            IEnumerable<Blog> blogs = await db.Blogs.ToListAsync();
+            List<BlogModel> models = new List<BlogModel>();
+            foreach (var blog in blogs)
+            {
+                BlogModel model = new BlogModel { Blog = blog, User = db.Users.FirstOrDefault(u => blog.UserId == u.Id) };
+                models.Add(model);
+            }
+            return View(models);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -1,25 +1,21 @@
-﻿@model IEnumerable<Bloghost.Models.Blog>
+﻿@model IEnumerable<Bloghost.ViewModels.BlogModel>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Blogs";
 }
 
-<h3>Hello, @User.Identity.Name</h3>
-
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Creation date</th>
-    </tr>
+<div id="blogs" class="m-4">
     @foreach (var blog in Model)
     {
-        <tr>
-            <td>@blog.Id</td>
-            <td>@blog.NameBlog</td>
-            <td>@blog.DescriptionBlog</td>
-            <td>@blog.CreationDateBlog</td>
-        </tr>
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@blog.Blog.NameBlog</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@blog.User.Name</h6>
+                <p class="card-text">@blog.Blog.DescriptionBlog</p>
+            </div>
+            <div class="card-footer">
+                <h6 class="text-right" style="color: midnightblue">@blog.Blog.CreationDateBlog</h6>
+            </div>
+        </div>
     }
-</table>
+</div>
 
