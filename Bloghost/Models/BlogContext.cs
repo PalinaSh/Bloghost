@@ -14,6 +14,8 @@ namespace Bloghost.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<ArticleTags> ArticleTags { get; set; }
+        public DbSet<ArticleComments> ArticleComments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
