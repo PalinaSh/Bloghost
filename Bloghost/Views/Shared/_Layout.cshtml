@@ -19,8 +19,8 @@
     <nav class="navbar navbar-expand-lg" style="background-color: midnightblue">
         <a asp-action="Index" asp-controller="Home" class="a logo font-weight-bold">p</a>
         <div class="collapse navbar-collapse">
-            <form class="input-group col-4 mx-4">
-                <input class="form-control" placeholder="Search">
+            <form class="input-group col-4 mx-4" asp-controller="Article" asp-action="Search">
+                <input class="form-control" placeholder="Search" name="tag">
                 <div class="input-group-append">
                     <button class="btn btn-outline-info" type="submit">
                         <span class="oi oi-magnifying-glass" aria-hidden="true"></span>
