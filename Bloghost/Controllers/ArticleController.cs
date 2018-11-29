@@ -21,9 +21,30 @@ namespace Bloghost.Controllers
             return View("Articles", articleTags);
         }
 
-        public IActionResult Create(Article article)
+        [HttpGet]
+        public IActionResult Create(int id)
         {
-            return View();
+            var article = new Article();
+            var blog = db.Blogs.FirstOrDefault(b => b.Id == id);
+            article.Blog = new Blog { NameBlog = blog.NameBlog, Id = id };
+            article.BlogId = id;
+            return View(article);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Article article)
+        {
+            if (ModelState.IsValid)
+            {
+                Blog blog = db.Blogs.FirstOrDefault(b => b.Id == article.BlogId);
+                article.Blog = blog;
+                blog.Articles.Add(article);
+                article.Id = 0;
+                db.Articles.Add(article);
+                await db.SaveChangesAsync();
+                return View("Blog");
+            }
+            return View(article);
         }
     }
 }

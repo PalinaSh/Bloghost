@@ -3,39 +3,40 @@
     ViewData["Title"] = "Profile";
 }
 
-<div class="m-4">
-    <div class="col-3 float-left pr-3">
-        <a title="Change your avatar" asp-controller="User" asp-action="Edit">
-            <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom" />
-        </a>
-        <div class="py-3">
-            <h3>@Model.Name</h3>
-        </div>
-        @if (User.Identity.Name == Model.Name)
-        {
-        <div class="mb-3" style="width: 19rem;">
-            <button class="btn btn-secondary btn-block" id="btnCreateBlog">Add new blog</button>
-            <a class="btn btn-secondary btn-block" asp-action="Edit" asp-controller="User">Edit profile</a>
-        </div>
-        }
+<div class="col-3 float-left m-4">
+    <a title="Change your avatar" asp-controller="User" asp-action="Edit">
+        <img src="@Url.Content(Model.Photo)" width="302" height="302" class="avatar bs-tooltip-bottom" />
+    </a>
+    <div class="py-3">
+        <h3>@Model.Name</h3>
     </div>
+    @if (User.Identity.Name == Model.Name)
+    {
+    <div class="mb-3" style="width: 19rem;">
+        <button class="btn btn-secondary btn-block" id="btnCreateBlog">Add new blog</button>
+        <a class="btn btn-secondary btn-block" asp-action="Edit" asp-controller="User">Edit profile</a>
+    </div>
+    }
+</div>
 
-    <div id="blogs">
+<div id="blogs">
+    <div class="form-inline">
         @foreach (var blog in Model.Blogs)
         {
-            <div class="card" style="width: 18rem;">
+            <div class="card mr-2 mb-1" style="width: 18rem; position:relative; top:30px;">
                 <div class="card-body">
                     <h5 class="card-title">@blog.NameBlog</h5>
                     <p class="card-text">@blog.DescriptionBlog</p>
                 </div>
                 <div class="card-footer">
                     <h6 class="text-right" style="color: midnightblue">@blog.CreationDateBlog</h6>
-                    <a asp-action="Create" asp-controller="Article">Add Article</a>
+                    <a asp-action="Create" asp-controller="Article" asp-route-id="@blog.Id">Add Article</a>
                 </div>
             </div>
         }
     </div>
 </div>
+
 
 <script>
     function CreateNewBlog() {
@@ -59,31 +60,16 @@
     function CreateBlogsFromJSON(response) {
         response = JSON.parse(response);
         $("#blogs").empty();
-        for (var i = 0; i < response.length; i++) {
-            BlogCards();
-        }
+        BlogCards();
     }
 
     function CreateBlogsFromModel() {
         $("#blogs").empty();
-        @foreach (var blog in Model.Blogs)
-        { 
-            <text>
-                $("#blogs").append('<a href="#" class="card-link">' + '@blog.Id'+'</a > ');
-            </text>
-        }
+        BlogCards();
     }
 
     function BlogCards() {
-        $("#blogs").append('<div id="blogs">');
-        $("#blogs").append('<div class="card" style="width: 18rem;">');
-        $("#blogs").append('<div class="card-body">');
-        $("#blogs").append('<h5 class= "card-title" > Card title</h5 >');
-        $("#blogs").append('<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>');
-        $("#blogs").append('<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>');
-        $("#blogs").append('<a href="#" class="card-link">Card link</a>');
-        $("#blogs").append('<a href="#" class="card-link">Another link</a>');
-        $("#blogs").append('</div ></div >');
+        $("#blogs").append('<div class="form-inline">@foreach (var blog in Model.Blogs){<div class="card mr-2 mb-1" style="width: 18rem; position:relative; top:30px;"><div class="card-body"><h5 class="card-title">@blog.NameBlog</h5><p class="card-text">@blog.DescriptionBlog</p></div><div class="card-footer"><h6 class="text-right" style="color: midnightblue">@blog.CreationDateBlog</h6><a asp-action="Create" asp-controller="Article">Add Article</a></div></div>}</div>');
     }
 
     function CreateView() {

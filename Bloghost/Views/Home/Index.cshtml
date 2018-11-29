@@ -3,10 +3,10 @@
     ViewData["Title"] = "Blogs";
 }
 
-<div id="blogs" class="m-4">
+<div class="form-inline m-4">
     @foreach (var blog in Model)
     {
-        <div class="card" style="width: 18rem;">
+        <div class="card mr-2 mb-1" style="width: 18.4rem;">
             <div class="card-body">
                 <h5 class="card-title">@blog.Blog.NameBlog</h5>
                 <h6 class="card-subtitle mb-2 text-muted">@blog.User.Name</h6>
