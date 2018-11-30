@@ -41,5 +41,15 @@ namespace Bloghost.Controllers
                 return Json(Encoding.Default.GetString(fs.ToArray()));
             }
         }
+
+        public IActionResult Blog(int id)
+        {
+            var blog = db.Blogs.FirstOrDefault(b => b.Id == id);
+            var user = db.Users.FirstOrDefault(u => u.Id == blog.UserId);
+            var articles = db.Articles.Where(a => a.BlogId == id);
+            blog.User = user;
+            blog.Articles.AddRange(articles);
+            return View(blog);
+        }
     }
 }

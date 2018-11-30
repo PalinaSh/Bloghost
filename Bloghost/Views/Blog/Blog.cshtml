@@ -3,3 +3,34 @@
     ViewData["Title"] = "Blog";
 }
 
+<div class="text-center col-8 offset-2 mt-4">
+    <h3>Blog: @Model.NameBlog</h3>
+    <h5>@@@Model.User.Name</h5>
+    @if (Model.Articles.Count == 0)
+    {
+        <h6 class="mt-3">There are no articles</h6>
+    }
+    else
+    {
+        <div class="m-4 text-left">
+            @foreach (var article in Model.Articles)
+            {
+                <div class="card mr-2 mb-3 col-12">
+                    <div class="card-body">
+                        <h5 class="card-title">@article.NameArticle</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@article.DescriptionArcticle</h6>
+                        <p class="card-text">@article.TextArticle</p>
+                    </div>
+                    <div class="card-footer">
+                        <h6 class="text-right" style="color: midnightblue">@article.CreationDateArticle</h6>
+                        @if (User.Identity.Name == Model.User.Name)
+                        {
+                            <button class="btn btn-secondary">Remove article</button>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+

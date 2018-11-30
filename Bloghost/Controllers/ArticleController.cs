@@ -42,7 +42,7 @@ namespace Bloghost.Controllers
                 article.Id = 0;
                 db.Articles.Add(article);
                 await db.SaveChangesAsync();
-                return View("Blog");
+                return View("Blog/Blog");
             }
             return View(article);
         }

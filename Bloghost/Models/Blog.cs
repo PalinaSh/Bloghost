@@ -24,7 +24,7 @@ namespace Bloghost.Models
         public int? UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Article> Articles { get; set; }
+        public List<Article> Articles { get; set; }
 
         public Blog()
         {

@@ -39,7 +39,7 @@
                     <a class="dropdown-item" asp-action="Profile" asp-controller="User">Signed in as <strong>@User.Identity.Name</strong></a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" asp-action="Profile" asp-controller="User">Your profile</a>
-                    <a class="dropdown-item" href="#">Your blogs</a>
+                    <a class="dropdown-item" asp-action="Profile" asp-controller="User">Your blogs</a>
                     @if (User.IsInRole("admin"))
                     {
                         <div class="dropdown-divider"></div>
