@@ -1,4 +1,5 @@
 ﻿using Bloghost.Models;
+using Bloghost.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Bloghost.Controllers
             var blog = db.Blogs.FirstOrDefault(b => b.Id == id);
             article.Blog = new Blog { NameBlog = blog.NameBlog, Id = id };
             article.BlogId = id;
+            var articleModel = new ArticleModel() { article = article };
             return View(article);
         }
 
@@ -45,6 +47,13 @@ namespace Bloghost.Controllers
                 return View("Blog/Blog");
             }
             return View(article);
+        }
+
+        [HttpPost]
+        public IActionResult AddTagString(Article article)
+        {
+
+            return View("Create", article);
         }
     }
 }

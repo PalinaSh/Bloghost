@@ -1,42 +1,63 @@
-﻿@model Bloghost.Models.Article
+﻿@model Bloghost.ViewModels.ArticleModel
 @{
     ViewData["Title"] = "Create article";
 }
 
 <form class="col-12" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    
+
     <div class="form-group row ml-5 mt-4">
-        <input asp-for="BlogId" type="hidden" value="@Model.BlogId" />
-        <input asp-for="Blog.NameBlog"type="hidden"  value="@Model.Blog.NameBlog" />
-        <h5>Blog name: <b>@Model.Blog.NameBlog</b></h5>
+        <input asp-for="article.BlogId" type="hidden" value="@Model.article.BlogId" />
+        <input asp-for="article.Blog.NameBlog" type="hidden" value="@Model.article.Blog.NameBlog" />
+        <h5>Blog name: <b>@Model.article.Blog.NameBlog</b></h5>
     </div>
     <div class="form-group row ml-5 mt-4">
 
         <label class="col-form-label">Name</label>
         <div class="col-7">
-            <input asp-for="NameArticle" class="form-control" placeholder="Name" />
-            <span asp-validation-for="NameArticle" class="text-danger"></span>
+            <input asp-for="article.NameArticle" class="form-control" placeholder="Name" />
+            <span asp-validation-for="article.NameArticle" class="text-danger"></span>
         </div>
         <label class="col-form-label offset-1">Creation date</label>
         <div class="col-2">
-            <input asp-for="CreationDateArticle" readonly type="text" class="form-control-plaintext" value="@DateTime.Now.ToString("dd.MM.yyyy HH:mm")" />
+            <input asp-for="article.CreationDateArticle" readonly type="text" class="form-control-plaintext" value="@DateTime.Now.ToString("dd.MM.yyyy HH:mm")" />
         </div>
     </div>
     <div class="form-group ml-5 mr-5">
-        <label asp-for="DescriptionArcticle" class="control-label">Description</label>
-        <textarea asp-for="DescriptionArcticle" class="form-control" placeholder="Description"></textarea>
-        <span asp-validation-for="DescriptionArcticle" class="text-danger"></span>
+        <label asp-for="article.DescriptionArcticle" class="control-label">Description</label>
+        <textarea asp-for="article.DescriptionArcticle" class="form-control" placeholder="Description"></textarea>
+        <span asp-validation-for="article.DescriptionArcticle" class="text-danger"></span>
     </div>
     <div class="form-group ml-5 mr-5">
-        <label asp-for="TextArticle" class="control-label">Text</label>
-        <textarea asp-for="TextArticle" class="form-control" placeholder="Text"></textarea>
-        <span asp-validation-for="TextArticle" class="text-danger"></span>
+        <label asp-for="article.TextArticle" class="control-label">Text</label>
+        <textarea asp-for="article.TextArticle" class="form-control" placeholder="Text"></textarea>
+        <span asp-validation-for="article.TextArticle" class="text-danger"></span>
+    </div>
+
+    <div class="form-group ml-5 mt-4">
+        <label asp-for="tagName" class="control-label">Tags</label>
+        <div class="row ml-0">
+            <input asp-for="tagName" type="text" class="form-control col-7" placeholder="Tag" />
+            <button class="btn btn-secondary">
+                <span class="oi oi-plus" title="plus" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div>
+            @foreach (var tag in Model.Tags)
+            {
+                <div style="display:inline">
+                    <button value="@tag.TagId" class="btn btn-default bg-white">
+                        <span class="oi oi-x" title="x" aria-hidden="true" style="position:relative; left:-10px;"></span>
+                    </button>
+                </div>
+            }
+        </div>
     </div>
 
     <div class="form-group row text-right offset-10">
-        <input type="submit" value="Cancel" class="btn btn-secondary mr-3" asp-action="Profile" asp-controller="User"/>
-        <input type="submit" value="Create" class="btn btn-secondary" asp-action="Create" asp-controller="Article"/>
+        <input type="submit" value="Cancel" class="btn btn-secondary mr-3" asp-action="Profile" asp-controller="User" />
+        <input type="submit" value="Create" class="btn btn-secondary" asp-action="Create" asp-controller="Article" />
     </div>
+
 </form>
 
