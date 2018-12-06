@@ -48,7 +48,7 @@
             {
                 <div style="display: inline">
                     <label>@tag.Tag.Name</label>
-                    <button value="@tag.Tag.Name" class="btn btn-default bg-white" style="color: black">
+                    <button asp-route-tagDelete="@tag.Tag.Name" asp-action="Create" asp-controller="Article" asp-route-delete="true" class="btn btn-default bg-white" style="color: black">
                         <span class="oi oi-x" title="x" aria-hidden="true" style="position: relative; left: -10px;"></span>
                     </button>
                 </div>
@@ -58,7 +58,7 @@
 
     <div class="form-group row text-right offset-10">
         <input type="submit" value="Cancel" class="btn btn-secondary mr-3" asp-action="Profile" asp-controller="User" />
-        <input type="submit" value="Create" class="btn btn-secondary" asp-action="Create" asp-controller="Article" />
+        <input type="submit" value="Create" class="btn btn-secondary" asp-action="Create" asp-controller="Article" asp-route-create="true" />
     </div>
 
 </form>

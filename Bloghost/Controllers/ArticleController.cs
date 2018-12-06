@@ -34,40 +34,71 @@ namespace Bloghost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleModel articleModel)
+        public async Task<IActionResult> Create(ArticleModel articleModel, string tagDelete = "", bool delete = false, bool create = false)
         {
-            if (articleModel.tagName != "")
+            if (delete)
             {
-                
-                articleModel.tags += articleModel.tagName + "$";
-                foreach (var tagName in articleModel.tags.Split('$'))
-                    if (tagName != "")
-                    { 
-                        var tag = new Tag() { Id = 0, Name = tagName };
-                        articleModel.article.Tags.Add(new ArticleTags() { Tag = tag });
-                    }
-               
+                DeleteTag(tagDelete, articleModel);
             }
-            if (ModelState.IsValid)
+            else if (articleModel.tagName != "")
+            {
+                AddTag(articleModel);   
+            }
+            if (ModelState.IsValid && create)
             {
                 Blog blog = db.Blogs.FirstOrDefault(b => b.Id == articleModel.article.BlogId);
                 articleModel.article.Blog = blog;
                 blog.Articles.Add(articleModel.article);
                 articleModel.article.Id = 0;
                 db.Articles.Add(articleModel.article);
+
                 await db.SaveChangesAsync();
+                /*var articleId = articleModel.article.Id;
+
+                var createdTags = db.Tags.ToList();
+                foreach (var tagName in articleModel.tags.Split('$'))
+                {
+                    if (tagName != "" && createdTags.Where(t => t.Name == tagName).Count() == 0)
+                    {
+                        var tag = new Tag { Id = 0, Name = tagName };
+                        db.Tags.Add(tag);
+                        await db.SaveChangesAsync();
+                        var tagId = tag.Id;
+                        db.ArticleTags.Add(new ArticleTags { ArticleId = articleId, TagId = tagId });
+                        await db.SaveChangesAsync();
+                    }
+                }*/
+                
                 return Redirect("Blog/Blog");
-                //return View("Blog/Blog");
             }
             return View(articleModel);
         }
 
-        /*[HttpPost]
-        public IActionResult AddTagString(ArticleModel articleModel)
+        private void DeleteTag(string tagDelete, ArticleModel articleModel)
         {
-            var tag = new Tag() {Id = 0, Name = articleModel.tagName };
-            articleModel.article.Tags.Add(new ArticleTags(){Tag = tag});
-            return View($"Create/{articleModel.article.BlogId}", articleModel);
-        }*/
+            List<string> tagsName = articleModel.tags.Split('$').ToList();
+            tagsName.Remove(tagDelete);
+            articleModel.tags = "";
+            foreach (var tagName in tagsName)
+            {
+                if (tagName != "")
+                {
+                    articleModel.tags += tagName + "$";
+                    articleModel.article.Tags.Add(new ArticleTags() { Tag = new Tag() { Id = 0, Name = tagName } });
+                }
+            }
+        }
+
+        private void AddTag(ArticleModel articleModel)
+        {
+            articleModel.tags += articleModel.tagName + "$";
+            foreach (var tagName in articleModel.tags.Split('$'))
+                if (tagName != "")
+                {
+                    var tag = new Tag() { Id = 0, Name = tagName };
+                    if (articleModel.article.Tags.Where(t => t.Tag.Name == tagName).Count() == 0)
+                        articleModel.article.Tags.Add(new ArticleTags() { Tag = tag });
+                }
+        }
     }
 }

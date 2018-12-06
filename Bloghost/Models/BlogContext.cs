@@ -19,9 +19,10 @@ namespace Bloghost.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ArticleTags>().HasKey(x => new { x.ArticleId, x.TagId });
-            modelBuilder.Entity<ArticleTags>().HasOne(x => x.Article).WithMany(y => y.Tags).HasForeignKey(y => y.TagId);
+            modelBuilder.Entity<ArticleTags>().HasKey(x => new { x.TagId, x.ArticleId });
             modelBuilder.Entity<ArticleTags>().HasOne(x => x.Tag).WithMany(y => y.Articles).HasForeignKey(y => y.ArticleId);
+            modelBuilder.Entity<ArticleTags>().HasOne(x => x.Article).WithMany(y => y.Tags).HasForeignKey(y => y.TagId);
+
 
             modelBuilder.Entity<ArticleComments>().HasKey(x => new { x.ArticleId, x.CommentId });
             modelBuilder.Entity<ArticleComments>().HasOne(x => x.Article).WithMany(y => y.Comments).HasForeignKey(y => y.CommentId);
