@@ -30,30 +30,44 @@ namespace Bloghost.Controllers
             article.Blog = new Blog { NameBlog = blog.NameBlog, Id = id };
             article.BlogId = id;
             var articleModel = new ArticleModel() { article = article };
-            return View(article);
+            return View(articleModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Article article)
+        public async Task<IActionResult> Create(ArticleModel articleModel)
         {
+            if (articleModel.tagName != "")
+            {
+                
+                articleModel.tags += articleModel.tagName + "$";
+                foreach (var tagName in articleModel.tags.Split('$'))
+                    if (tagName != "")
+                    { 
+                        var tag = new Tag() { Id = 0, Name = tagName };
+                        articleModel.article.Tags.Add(new ArticleTags() { Tag = tag });
+                    }
+               
+            }
             if (ModelState.IsValid)
             {
-                Blog blog = db.Blogs.FirstOrDefault(b => b.Id == article.BlogId);
-                article.Blog = blog;
-                blog.Articles.Add(article);
-                article.Id = 0;
-                db.Articles.Add(article);
+                Blog blog = db.Blogs.FirstOrDefault(b => b.Id == articleModel.article.BlogId);
+                articleModel.article.Blog = blog;
+                blog.Articles.Add(articleModel.article);
+                articleModel.article.Id = 0;
+                db.Articles.Add(articleModel.article);
                 await db.SaveChangesAsync();
-                return View("Blog/Blog");
+                return Redirect("Blog/Blog");
+                //return View("Blog/Blog");
             }
-            return View(article);
+            return View(articleModel);
         }
 
-        [HttpPost]
-        public IActionResult AddTagString(Article article)
+        /*[HttpPost]
+        public IActionResult AddTagString(ArticleModel articleModel)
         {
-
-            return View("Create", article);
-        }
+            var tag = new Tag() {Id = 0, Name = articleModel.tagName };
+            articleModel.article.Tags.Add(new ArticleTags(){Tag = tag});
+            return View($"Create/{articleModel.article.BlogId}", articleModel);
+        }*/
     }
 }

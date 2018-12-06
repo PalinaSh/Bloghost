@@ -12,6 +12,7 @@ namespace Bloghost.ViewModels
         public Article article { get; set; }
         [Required(ErrorMessage = "Tag name is required")]
         public string tagName { get; set; }
+        public string tags { get; set; }
         public string comment { get; set; }
     }
 }
