@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Bloghost.Models.User>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="col-12">
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <img src="@Url.Content(item.Photo)" width="100" height="100" class="avatar bs-tooltip-bottom" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role.Name)
+            </td>
+            <td class="text-right">
+                @if (item.Name != User.Identity.Name)
+                {
+                <button class="btn btn-secondary" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">
+                    <span class="oi oi-trash"></span>
+                </button>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>

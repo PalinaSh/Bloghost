@@ -18,8 +18,25 @@ namespace Bloghost.Controllers
 
         public IActionResult Search(string tag)
         {
-            IEnumerable<ArticleTags> articleTags = db.ArticleTags.Where(t => t.Tag.Name == tag);
-            return View("Articles", articleTags);
+            var tagModel = db.Tags.FirstOrDefault(t => t.Name == tag);
+            IEnumerable<ArticleTags> articleTags = db.ArticleTags.Where(t => t.ArticleId == tagModel.Id); // потому что почему-то перепутаны колонки :З
+            var articles = new List<Article>();
+            try
+            {
+                foreach (var articleTag in articleTags)
+                {
+                    articles.Add(db.Articles.FirstOrDefault(a => a.Id == articleTag.TagId));
+                    articles.Last().Tags = new List<ArticleTags>();
+                    foreach (var tagArticle in db.ArticleTags.Where(a => a.TagId == articleTag.TagId))
+                    {
+                        var Tag = db.Tags.FirstOrDefault(t => t.Id == tagArticle.ArticleId);
+                        if (articles.Last().Tags.Where(t => t.Tag.Name == Tag.Name).Count() == 0)
+                            articles.Last().Tags.Add(new ArticleTags() { Tag = Tag });
+                    }
+                }
+            }
+            catch (Exception e) { return View("Articles", null); }
+            return View("Articles", articles);
         }
 
         [HttpGet]
@@ -53,23 +70,8 @@ namespace Bloghost.Controllers
                 db.Articles.Add(articleModel.article);
 
                 await db.SaveChangesAsync();
-                /*var articleId = articleModel.article.Id;
-
-                var createdTags = db.Tags.ToList();
-                foreach (var tagName in articleModel.tags.Split('$'))
-                {
-                    if (tagName != "" && createdTags.Where(t => t.Name == tagName).Count() == 0)
-                    {
-                        var tag = new Tag { Id = 0, Name = tagName };
-                        db.Tags.Add(tag);
-                        await db.SaveChangesAsync();
-                        var tagId = tag.Id;
-                        db.ArticleTags.Add(new ArticleTags { ArticleId = articleId, TagId = tagId });
-                        await db.SaveChangesAsync();
-                    }
-                }*/
                 
-                return Redirect("Blog/Blog");
+                return Redirect("~/Blog/Blog");
             }
             return View(articleModel);
         }
@@ -83,7 +85,8 @@ namespace Bloghost.Controllers
             {
                 if (tagName != "")
                 {
-                    articleModel.tags += tagName + "$";
+                    if (articleModel.tags.Split('$').Where(t => t == tagName).Count() == 0)
+                        articleModel.tags += tagName + "$";
                     articleModel.article.Tags.Add(new ArticleTags() { Tag = new Tag() { Id = 0, Name = tagName } });
                 }
             }
@@ -91,14 +94,31 @@ namespace Bloghost.Controllers
 
         private void AddTag(ArticleModel articleModel)
         {
-            articleModel.tags += articleModel.tagName + "$";
-            foreach (var tagName in articleModel.tags.Split('$'))
-                if (tagName != "")
-                {
-                    var tag = new Tag() { Id = 0, Name = tagName };
-                    if (articleModel.article.Tags.Where(t => t.Tag.Name == tagName).Count() == 0)
-                        articleModel.article.Tags.Add(new ArticleTags() { Tag = tag });
-                }
+            if (articleModel.tags == null)
+                articleModel.tags = "";
+            if (articleModel.tags.Split('$').Where(t => t == articleModel.tagName).Count() == 0)
+                articleModel.tags += articleModel.tagName + "$";
+                foreach (var tagName in articleModel.tags.Split('$'))
+                    if (tagName != "")
+                    {
+                        var tag = new Tag() { Id = 0, Name = tagName };
+                        if (articleModel.article.Tags.Where(t => t.Tag.Name == tagName).Count() == 0)
+                            articleModel.article.Tags.Add(new ArticleTags() { Tag = tag });
+                    }
+        }
+
+        public async Task<IActionResult> Delete(int articleId, int blogId)
+        {
+            var article = db.Articles.FirstOrDefault(a => a.Id == articleId);
+            db.Articles.Remove(article);
+            await db.SaveChangesAsync();
+            return Redirect($"~/Blog/Blog/{blogId}");
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var article = db.Articles.FirstOrDefault(a => a.Id == id);
+            return View();
         }
     }
 }

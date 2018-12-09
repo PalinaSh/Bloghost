@@ -15,20 +15,31 @@
         <div class="m-4 text-left">
             @foreach (var article in Model.Articles)
             {
+            <form method="post">
                 <div class="card mr-2 mb-3 col-12">
                     <div class="card-body">
                         <h5 class="card-title">@article.NameArticle</h5>
                         <h6 class="card-subtitle mb-2 text-muted">@article.DescriptionArcticle</h6>
                         <p class="card-text">@article.TextArticle</p>
+                        <div class="row card-group text-center">
+                            @foreach (var tag in article.Tags)
+                            {
+                                <label class="text-center ml-2">#@tag.Tag.Name </label>
+                            }
+                        </div>
                     </div>
                     <div class="card-footer">
                         <h6 class="text-right" style="color: midnightblue">@article.CreationDateArticle</h6>
                         @if (User.Identity.Name == Model.User.Name)
                         {
-                            <button class="btn btn-secondary">Remove article</button>
-                        }
+                        <div class="row">
+                            <button asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id" class="btn btn-secondary mr-2">Edit aticle</button>
+                            <button asp-controller="Article" asp-action="Delete" asp-route-articleId="@article.Id" asp-route-blogId="@Model.Id" class="btn btn-secondary">Remove article</button>
+                        </div>
+                         }
                     </div>
                 </div>
+            </form>
             }
         </div>
     }

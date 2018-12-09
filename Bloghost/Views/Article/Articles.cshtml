@@ -1,7 +1,33 @@
-﻿
+﻿@model IEnumerable<Bloghost.Models.Article>
 @{
     ViewData["Title"] = "Articles";
 }
 
-<h2>Articles</h2>
-
+@if (Model == null)
+{
+    <h6 class="m-4 text-center">There are no articles with this tag</h6>
+}
+else
+{
+    <div class="form-inline m-4">
+        @foreach (var article in Model)
+        {
+            <div class="card mr-2 mb-1" style="width: 18.4rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@article.NameArticle</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@article.DescriptionArcticle</h6>
+                    <p class="card-text">@article.TextArticle</p>
+                    <div class="row card-group text-center">
+                        @foreach (var tag in article.Tags)
+                        {
+                            <label class="text-center ml-2">#@tag.Tag.Name </label>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <h6 class="text-right" style="color: midnightblue">@article.CreationDateArticle</h6>
+                </div>
+            </div>
+        }
+    </div>
+}

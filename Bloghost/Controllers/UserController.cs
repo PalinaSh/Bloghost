@@ -103,5 +103,25 @@ namespace Bloghost.Controllers
                 Photo = currentProfile.Photo
             });
         }
+
+        public IActionResult Users()
+        {
+            var users = db.Users.ToList();
+            var userModels = new List<User>();
+            foreach (var user in users)
+            {
+                user.Role = db.Roles.FirstOrDefault(r => r.Id == user.RoleId);
+                userModels.Add(user);
+            }
+            return View(db.Users.ToList());
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = db.Users.FirstOrDefault(u => u.Id == id);
+            db.Users.Remove(user);
+            await db.SaveChangesAsync();
+            return View("Users");
+        }
     }
 }
